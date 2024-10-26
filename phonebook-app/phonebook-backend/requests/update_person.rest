@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/persons/671c92a61007126bcf862818
+Content-Type: application/json
+
+{
+  "name": "Maroon Mountain",
+  "number": "631-11-93914"
+}
