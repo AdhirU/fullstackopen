@@ -12,20 +12,25 @@ const Note = require('../models/note')
 const User = require('../models/user')
 
 describe('when there are initially some notes and a user saved', () => {
-  let userId
+  let user
+  let token
   beforeEach(async () => {
     // Create new user
     await User.deleteMany()
     const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({ username: 'root', passwordHash })
-    await user.save()
-    userId = user.id
+    const firstUser = new User({ username: 'root', passwordHash })
+    await firstUser.save()
+    user = firstUser
 
     // Create initial notes
     await Note.deleteMany({})
     const notes = helper.initialNotes
     notes.forEach(n => n.user = user.id)
     await Note.insertMany(notes)
+
+    const result = await api.post('/api/login')
+      .send({ username: user.username, password: 'sekret' })
+    token = result.body.token
   })
 
   test('notes are returned as json', async () => {
@@ -80,11 +85,11 @@ describe('when there are initially some notes and a user saved', () => {
       const newNote = {
         content: 'async/await simplifies making async calls',
         important: true,
-        userId
       }
 
       await api.post('/api/notes')
         .send(newNote)
+        .set('Authorization', `Bearer ${token}`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -98,11 +103,11 @@ describe('when there are initially some notes and a user saved', () => {
     test('fails with status code 400 if data is invalid', async () => {
       const newNote = {
         important: true,
-        userId
       }
 
       await api.post('/api/notes')
         .send(newNote)
+        .set('Authorization', `Bearer ${token}`)
         .expect(400)
 
       const notesAtEnd = await helper.notesInDb()
@@ -117,6 +122,7 @@ describe('when there are initially some notes and a user saved', () => {
       const noteToDelete = notesAtStart[0]
 
       await api.delete(`/api/notes/${noteToDelete.id}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(204)
 
       const notesAtEnd = await helper.notesInDb()

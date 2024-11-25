@@ -10,7 +10,7 @@ const User = require('../models/user')
 
 const api = supertest(app)
 
-describe('when there are initially some blogs and a user saved', () => {
+describe.only('when there are initially some blogs and a user saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany()
     await User.deleteMany()
@@ -45,7 +45,7 @@ describe('when there are initially some blogs and a user saved', () => {
     assert(!Object.keys(firstBlog).includes('_id'))
   })
   
-  describe('adding a new blog', () => {
+  describe.only('adding a new blog', () => {
     let token
     let user
 
@@ -58,14 +58,18 @@ describe('when there are initially some blogs and a user saved', () => {
 
       token = result.body.token
     })
-    test('succeeds with valid data', async () => {
+    test.only('succeeds with valid data', async () => {
       const newBlog = { title: 'Created Blog', url: 'blog.com', author: 'Me', likes: 20, user: user.id }
     
-      await api.post('/api/blogs')
+      const responseBlog = await api.post('/api/blogs')
         .send(newBlog)
         .set('Authorization',`Bearer ${token}`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
+
+      assert.strictEqual(responseBlog.body.title, newBlog.title)
+      assert.strictEqual(responseBlog.body.user.id, user.id)
+      assert.strictEqual(responseBlog.body.user.username, user.username)
     
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(helper.initialBlogs.length + 1, blogsAtEnd.length)
