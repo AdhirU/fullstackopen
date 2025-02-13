@@ -1,13 +1,18 @@
-const Notification = ({ notification }) => {
+import { Alert } from '@mui/material'
+import { useSelector } from 'react-redux'
+
+const Notification = () => {
+  const notification = useSelector(state => state.notification);
+
   if (notification === null) {
-    return null
+    return null;
   }
 
   return (
-    <div className={`notification ${notification.error ? 'error' : 'message'}`}>
+    <Alert severity={notification.error ? "error" : "success"}>
       {notification.message}
-    </div>
-  )
-}
+    </Alert>
+  );
+};
 
-export default Notification
+export default Notification;

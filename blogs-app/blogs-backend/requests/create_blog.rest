@@ -1,5 +1,6 @@
-POST http://localhost:3001/api/blogs
+POST http://localhost:3001/api/blogs/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3Mzc4NTRkNTk4YTkzNTQ3MzI2NzZmYyIsImlhdCI6MTczOTMzMDMxOCwiZXhwIjoxNzM5MzMzOTE4fQ.y7sYGSuuzmeOjnQZNnkNhOdIuHrA5SYEmwy5XV797Aw
 
 {
   "title": "A normal day",
