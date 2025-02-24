@@ -1,0 +1,11 @@
+POST http://localhost:3000/api/patients/d2773598-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "description": "Routine health check for the new year",
+  "date": "2025-01-01",
+  "specialist": "Dr. House",
+  "diagnosisCodes": ["Z57.1"],
+  "healthCheckRating": 1,
+  "type": "HealthCheck"
+}

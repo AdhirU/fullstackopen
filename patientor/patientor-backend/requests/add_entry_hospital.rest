@@ -1,0 +1,15 @@
+POST http://localhost:3000/api/patients/d2773598-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "description": "Slipped on some ice and got a fracture",
+  "date": "2025-01-01",
+  "specialist": "Dr. House",
+  "diagnosisCodes": ["Z57.1"],
+  "healthCheckRating": 1,
+  "discharge": {
+    "date": "2025-01-02",
+    "criteria": "put plaster on leg"
+  },
+  "type": "Hospital"
+}
